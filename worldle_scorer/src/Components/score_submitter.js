@@ -1,7 +1,9 @@
 import {useState} from 'react';
 
 function ScoreSubmitter(pastedValue){
-    console.log(pastedValue)
+    let gameObj = scoreParser(pastedValue)
+    
+
 }
 
 function scoreParser(pastedValue){
