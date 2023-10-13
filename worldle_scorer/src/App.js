@@ -1,8 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
 import ScorePaster from './Components/score_submitter';
+import { useState } from 'react';
+import InitApiCall from './Components/api_call';
+import ScoreRender from './Components/score_renderer';
+
+
 
 function App() {
+  const [scoresArray,setScoresArray] = useState([])
+  const [player,setPlayer] = useState('sam');
+  // setScoresArray(InitApiCall())
+
+
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -10,7 +21,8 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <ScorePaster></ScorePaster>
+        <ScoreRender scoresArray={scoresArray} player={player}></ScoreRender>
+        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player}></ScorePaster>
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -24,5 +36,7 @@ function App() {
     </div>
   );
 }
+
+
 
 export default App;

@@ -4,8 +4,11 @@ const app = express()
 const port = 3000
 require('dotenv').config()
 
-const password = process.env.MONGODBPASSWORD
-const url = 'mongodb+srv://calls002:'+password+'@cluster0.iraeblh.mongodb.net/?retryWrites=true&w=majority'
+const password = process.env.MONGODBPASSWORD;
+const url = 'mongodb+srv://calls002:'+password+'@cluster0.iraeblh.mongodb.net/?retryWrites=true&w=majority';
+
+mongoose.connect(url)
+
 
 app.get('/today', (req, res) => {
   res.send('Hello World!')
