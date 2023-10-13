@@ -1,9 +1,63 @@
 import {useState} from 'react';
 
+function scoreCalc(gameObj){
+    let score = 0
+    if (gameObj.gameType === "worldle")
+        {
+            score = 240
+            score = score - ((gameObj.attempts-1)*40)
+            score = score + (gameObj.stars * 20)
+            score = score + (gameObj.population * 10)
+            score = score + (gameObj.coin * 10)
+        };
+    if (gameObj.gameType === "travle")
+        {
+            if (gameObj.country === 'world')
+            {
+                score = 50
+                score = score + (gameObj.greens * 20)
+                score = score - (gameObj.oranges * 5)
+                score = score - (gameObj.reds * 10)
+                score = score - (gameObj.blacks * 20)
+                score = score - (gameObj.hints * 5)
+                if(score<0){score = 0}
+            } else
+            if (gameObj.country === 'gbr' || gameObj.country === 'irl')
+            {
+                score = 30
+                score = score + (gameObj.greens * 15)
+                score = score - (gameObj.oranges * 3)
+                score = score - (gameObj.reds * 7)
+                score = score - (gameObj.blacks * 15)
+                score = score - (gameObj.hints * 3)
+                if(score<0){score = 0}
+            }
+            else if (gameObj.country === 'usa')
+            {
+                score = 20
+                score = score + (gameObj.greens * 10)
+                score = score - (gameObj.oranges * 2)
+                score = score - (gameObj.reds * 5)
+                score = score - (gameObj.blacks * 10)
+                score = score - (gameObj.hints * 2)
+                if(score<0){score = 0}
+            } else {score = 0}
+        };
+    if (gameObj.gameType === "countryle")
+        {
+            if (gameObj.attempts === 1){score = 1000} else 
+            {
+                score = 50 - ((gameObj.attempts - 2 )*5)
+                if (score < 0){score = 0}
+            }
+        };
+    return (score);
+}
+
 function ScoreSubmitter(pastedValue, player, setWarningShow, scoreUpdater, scoresArray){
     let gameObj = scoreParser(pastedValue, player)
     if (gameObj === 'Not Recognised'){setWarningShow(true); return;}else{setWarningShow(false);}
-    
+    gameObj.score = scoreCalc(gameObj)
 
 }
 
@@ -48,7 +102,7 @@ function scoreParser(pastedValue,player){
         let day = Number(pastedValue.substring(10,13));
         if ((pastedValue.substring((pastedValue.indexOf('/')-1),(pastedValue.indexOf('/')))) === 'X'){
             fail = true;
-            attempts = 10;
+            attempts = 7;
 
         } else {
                 attempts = Number(pastedValue.substring((pastedValue.indexOf('/')-1),(pastedValue.indexOf('/'))));

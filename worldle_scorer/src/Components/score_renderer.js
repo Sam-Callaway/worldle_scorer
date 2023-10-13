@@ -14,6 +14,8 @@ function createScoreCard(gameObj){
     return(
         <div className="gamecard">
             <h2 id="gametype">Worldle</h2>
+            <h3 id="day"></h3>
+            <h3 id="attempts"></h3>
 
         </div>
     )}
@@ -26,7 +28,7 @@ function createScoreCard(gameObj){
     if (gameObj.gametype === 'countryle'){
         return(
             <div className="gamecard">
-                <h2 id="gametype">{gameObj.gametype}</h2>
+                <h2 id="gametype">Countryle</h2>
             </div>
     )} 
 }
