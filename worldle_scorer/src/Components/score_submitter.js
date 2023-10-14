@@ -1,5 +1,17 @@
 import {useState} from 'react';
 
+const removeDuplicates = (arr, keys) => {
+    const set = new Set();
+    return arr.filter(obj => {
+        const key = keys.map(k => obj[k]).join('|');
+        if (!set.has(key)) {
+            set.add(key);
+            return true;
+        }
+        return false;
+    });
+};
+
 function scoreCalc(gameObj){
     let score = 0
     if (gameObj.gameType === "worldle")
@@ -21,6 +33,7 @@ function scoreCalc(gameObj){
                 score = score - (gameObj.blacks * 20)
                 score = score - (gameObj.hints * 5)
                 if(score<0){score = 0}
+                if(gameObj.fail === true){score = 0}
             } else
             if (gameObj.country === 'gbr' || gameObj.country === 'irl')
             {
@@ -31,6 +44,7 @@ function scoreCalc(gameObj){
                 score = score - (gameObj.blacks * 15)
                 score = score - (gameObj.hints * 3)
                 if(score<0){score = 0}
+                if(gameObj.fail === true){score = 0}
             }
             else if (gameObj.country === 'usa')
             {
@@ -41,6 +55,7 @@ function scoreCalc(gameObj){
                 score = score - (gameObj.blacks * 10)
                 score = score - (gameObj.hints * 2)
                 if(score<0){score = 0}
+                if(gameObj.fail === true){score = 0}
             } else {score = 0}
         };
     if (gameObj.gameType === "countryle")
@@ -54,18 +69,29 @@ function scoreCalc(gameObj){
     return (score);
 }
 
+
+
 function ScoreSubmitter(pastedValue, player, setWarningShow, scoreUpdater, scoresArray){
-    let gameObj = scoreParser(pastedValue, player)
-    if (gameObj === 'Not Recognised'){setWarningShow(true); return;}else{setWarningShow(false);}
-    gameObj.score = scoreCalc(gameObj)
+    console.log(scoresArray)
+    let gameObj = scoreParser(pastedValue, player);
+    if (gameObj === 'Not Recognised'){setWarningShow(true); return;}else{setWarningShow(false);};
+    gameObj.score = scoreCalc(gameObj);
+    let currentArray = scoresArray;
+    currentArray.unshift(gameObj);
+    removeDuplicates(currentArray,['gameType','day','player','country']);
+    scoreUpdater(currentArray);
 
 }
 
+
+
 function scoreParser(pastedValue,player){
     let gameObj;
+    // possibly remove these constructors and move creating objects into ifs
     class worldleObj {constructor(day,attempts,stars,coin,population,fail,player) {
         this.gameType = "worldle";
         this.day = day;
+        this.country = null;
         this.attempts = attempts;
         this.stars = stars;
         this.coin = coin;
@@ -90,6 +116,7 @@ function scoreParser(pastedValue,player){
     class countryleObj {constructor(day,attempts,player){
         this.gameType = "countryle";
         this.day = day;
+        this.country = null;
         this.attempts = attempts;
         this.player = player;
 
@@ -141,15 +168,15 @@ function scoreParser(pastedValue,player){
                 }
                 else
                     {return("Not Recognised")}
-    console.log(gameObj)
+
     return (gameObj)
 
 }
 
-function ScorePaster(scoresArray, scoreUpdater, player){
+function ScorePaster(props){
     const [postContent, setPostContent] = useState('');
     const [warningShow, setWarningShow] = useState(false);
-    
+
     let warning = '';
     if(warningShow === true){warning = "Not recognised. Please paste scores directly from Worldle, Travle or Countryle"}
     
@@ -158,7 +185,7 @@ function ScorePaster(scoresArray, scoreUpdater, player){
         <div>{warning}</div>
         <label>
             Paste your scores:
-            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, player, setWarningShow, scoreUpdater, scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
+            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarningShow, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
         </label>
         </div>
     )

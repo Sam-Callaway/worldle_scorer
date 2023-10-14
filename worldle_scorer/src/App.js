@@ -13,7 +13,7 @@ function App() {
   // setScoresArray(InitApiCall())
 
 
-  
+
   return (
     <div className="App">
       <header className="App-header">
@@ -21,7 +21,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <ScoreRender scoresArray={scoresArray} player={player}></ScoreRender>
+        {/* <ScoreRender scoresArray={scoresArray} player={player}></ScoreRender> */}
         <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player}></ScorePaster>
         <a
           className="App-link"
@@ -35,6 +35,7 @@ function App() {
       </header>
     </div>
   );
+  
 }
 
 
