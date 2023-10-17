@@ -1,19 +1,5 @@
 import {useState} from 'react';
 
-function removeDuplicateObjects(arr) {
-    const uniqueObjects = [];
-    const keysSeen = new Set();
-
-    for (let obj of arr) {
-        const key = JSON.stringify(obj);
-        if (!keysSeen.has(key)) {
-            keysSeen.add(key);
-            uniqueObjects.push(obj);
-        }
-    }
-
-    return uniqueObjects;
-}
 
 function scoreCalc(gameObj){
     let score = 0
@@ -80,19 +66,13 @@ function ScoreSubmitter(pastedValue, player, setWarningShow, scoreUpdater, score
     gameObj.score = scoreCalc(gameObj);
     let currentArray = scoresArray;
     currentArray.unshift(gameObj);
-    let currentArrayStrings = []
+    let stringValues = [];
+    let currentArrayUnique = [];
     for (let obj of currentArray){
-        let objString = JSON.stringify(obj)
-        currentArrayStrings.push(objString)
-    }
-    let stringsSet = new Set(currentArrayStrings);
-    currentArrayStrings = Array.from(stringsSet);
-    currentArray = []
-    for (let string of currentArrayStrings){
-        let objString = JSON.parse(string)
-        currentArray.push(objString)
-    }
-    scoreUpdater(currentArray);
+        let stringValue = String(obj.gameType+obj.day+obj.country+obj.player);
+        if (!stringValues.includes(stringValue)){stringValues.push(stringValue);currentArrayUnique.unshift(obj)}
+    } 
+    scoreUpdater(currentArrayUnique);
 }
 
 
@@ -148,18 +128,8 @@ function scoreParser(pastedValue,player){
         let stars = (pastedValue.match(/\u{2B50}/gu)||[]).length;
         let coin = (pastedValue.match(/\u{1FA99}/gu)||[]).length;
         let population = (pastedValue.match(/\u{1F3D9}/gu)||[]).length;
-        //gameObj = new worldleObj(day,attempts,stars,coin,population,fail,player)
-        gameObj = {
-            gameType:"worldle",
-            day:day,
-            country:null,
-            attempts:attempts,
-            stars:stars,
-            coin:coin,
-            population:population,
-            fail:fail,
-            player:player
-        }
+        gameObj = new worldleObj(day,attempts,stars,coin,population,fail,player)
+
     }
     else
     // Parsing for travle scores

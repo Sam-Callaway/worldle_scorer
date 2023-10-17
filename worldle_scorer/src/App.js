@@ -9,29 +9,17 @@ import ScoreRender from './Components/score_renderer';
 
 function App() {
   const [scoresArray,setScoresArray] = useState([])
-  const [player,setPlayer] = useState('sam');
+  const [player1,setPlayer1] = useState('test');
+  const [player2,setPlayer2] = useState('none');
   // setScoresArray(InitApiCall())
 
-console.log("up top"+ JSON.stringify(scoresArray))
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        {/* <ScoreRender scoresArray={scoresArray} player={player}></ScoreRender> */}
-        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player}></ScorePaster>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        
+        <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>
+        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
+        <ScoreRender scoresArray={scoresArray} player={player2}></ScoreRender>
       </header>
     </div>
   );
