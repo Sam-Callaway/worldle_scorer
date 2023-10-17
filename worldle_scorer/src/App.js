@@ -12,7 +12,7 @@ function App() {
   const [player,setPlayer] = useState('sam');
   // setScoresArray(InitApiCall())
 
-
+console.log("up top"+ JSON.stringify(scoresArray))
 
   return (
     <div className="App">
