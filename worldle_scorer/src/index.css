@@ -11,3 +11,64 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.playerSelectButton{
+    padding:20px;
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-image: linear-gradient(to right, #446148 0%, #7b97c2 100%);
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.playerSelectButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+#playerButtonGrid{
+  display: flex;
+  flex-direction: column;
+}
+#scorePasting{
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+#scorePasting > textarea{resize: none;}
+
+.gamecard {
+  width: 300px;
+  background-color: #216450;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gamecard-content {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 10px;
+  text-align: start;
+  vertical-align: top;
+  }
+
+
+.gamecard-content-area {
+  font-size: 16px;
+  line-height: 1.6;
+  display:flex;
+  }
+  .gamecard-title-area {
+    display:flex;
+    justify-content: space-between;
+  }
+

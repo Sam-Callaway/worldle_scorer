@@ -1,5 +1,14 @@
 import {useState} from 'react';
 
+const today = new Date().setHours(0,0,0,0);
+const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
+const timeDifference = today - zeroDate;
+const dayDifference = timeDifference / (1000 * 60 * 60 * 24);
+const worldleDay = 636 + dayDifference
+const travleDay = 309 + dayDifference
+const travleCountryDay = 123 + dayDifference
+const countryleDay = 607 + dayDifference
+
 
 function scoreCalc(gameObj){
     let score = 0
@@ -60,9 +69,12 @@ function scoreCalc(gameObj){
 
 
 
-function ScoreSubmitter(pastedValue, player, setWarningShow, scoreUpdater, scoresArray){
+function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArray){
     let gameObj = scoreParser(pastedValue, player);
-    if (gameObj === 'Not Recognised'){setWarningShow(true); return;}else{setWarningShow(false);};
+    if (gameObj === 'Not Recognised'){setWarning('Not recognised. Please paste scores directly from Worldle, Travle or Countryle'); return;}
+    else
+    if (gameObj === 'Wrong Day'){setWarning('This is not today\'s game!'); return;}
+    else {setWarning('')};
     gameObj.score = scoreCalc(gameObj);
     let currentArray = scoresArray;
     currentArray.unshift(gameObj);
@@ -118,6 +130,7 @@ function scoreParser(pastedValue,player){
         let attempts;
         let fail = false;
         let day = Number(pastedValue.substring(10,13));
+        if(day !== worldleDay){return("Wrong Day")}
         if ((pastedValue.substring((pastedValue.indexOf('/')-1),(pastedValue.indexOf('/')))) === 'X'){
             fail = true;
             attempts = 7;
@@ -143,6 +156,8 @@ function scoreParser(pastedValue,player){
             if(pastedValue.substring(7,8) === '_'){
                 country = pastedValue.substring((pastedValue.indexOf('_')+1),pastedValue.indexOf(' '))
             } else {country = 'world'}
+            if(day ==! travleDay && country === 'world'){return("Wrong Day")}
+            if(day ==! travleCountryDay && country ==! 'world'){return("Wrong Day")}
             let greens = Number((pastedValue.match(/\u{2705}/gu)||[]).length);
             let oranges = Number((pastedValue.match(/\u{1F7E7}/gu)||[]).length);
             let reds = Number((pastedValue.match(/\u{1F7E5}/gu)||[]).length);
@@ -155,6 +170,7 @@ function scoreParser(pastedValue,player){
             // Parsing for countryle scores
                 if(pastedValue.substring(0,10) === "#Countryle"){
                     let day = Number(pastedValue.substring((pastedValue.indexOf(' ')+1),(pastedValue.lastindexOf('Guess')-1)))
+                    if(day ==! countryleDay){return("Wrong Day")}
                     let attempts = Number(pastedValue.substring((pastedValue.indexOf('Guessed in')+11),(pastedValue.indexOf('tries')-1)))
                     gameObj = new countryleObj(day,attempts,player)
                 }
@@ -167,17 +183,16 @@ function scoreParser(pastedValue,player){
 
 function ScorePaster(props){
     const [postContent, setPostContent] = useState('');
-    const [warningShow, setWarningShow] = useState(false);
+    const [warning, setWarning] = useState('');
 
-    let warning = '';
-    if(warningShow === true){warning = "Not recognised. Please paste scores directly from Worldle, Travle or Countryle"}
     
+       
     return (
         <div>
         <div>{warning}</div>
-        <label>
+        <label id='scorePasting'>
             Paste your scores:
-            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarningShow, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
+            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
         </label>
         </div>
     )
