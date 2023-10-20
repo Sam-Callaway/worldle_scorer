@@ -1,13 +1,20 @@
 
 
 function ScoreRender(props){
-    
+    let thisPlayer = ''
+    if (props.player === 'sam'){thisPlayer = 'Sam'};
+    if (props.player === 'rory'){thisPlayer = 'Rory'};
+    let totalScore = 0;
+    for (let obj of props.scoresArray){
+        if (obj.player === props.player){totalScore = totalScore + obj.score}
+    }
     return (
         <div className="gamelist">
         <div>
             {props.scoresArray.map(gameObj => (createScoreCard(gameObj, props.player)))}
         </div>
-        <div id='total-points'>Total Points:{props.totalScore}</div>
+        <div className='total-points'>Total Points:{totalScore}</div>
+        <div className='total-points'>{thisPlayer}</div>
         </div>
     )
 }
@@ -16,7 +23,7 @@ const coinEmojiCharacter = String.fromCodePoint(0x1FA99)
 const populationEmojiCharacter = String.fromCodePoint(0x1F3D9)
 
 function createScoreCard(gameObj, player){
-    let key = gameObj.gametype+gameObj.day+gameObj.country+gameObj.player
+    let key = String(gameObj.gametype)+String(gameObj.day)+String(gameObj.country)+String(gameObj.player)
     if (gameObj.player === player){
     if (gameObj.gameType === 'worldle'){
         let starsEmoji = '';
@@ -73,8 +80,14 @@ function createScoreCard(gameObj, player){
     )}
     if (gameObj.gameType === 'countryle'){
         return(
-            <div className="gamecard">
-                <h2 id="gametype">Countryle</h2>
+            <div key={key} className="gamecard">
+                <div className='gamecard-title-area'>
+                <h2 className='gamecard-content'>Countryle</h2>
+                <h2 className='gamecard-content' id="day">Day: {gameObj.day}</h2>
+                </div>                
+                <h3 className='gamecard-content' id="attempts">Found in {gameObj.attempts} guesses</h3>
+                <h3 className='countryle-points'>{gameObj.score} Points</h3>
+                
             </div>
     )} 
         }

@@ -51,7 +51,8 @@ code {
   margin-left: 2rem;
   margin-right: 2rem;
 }
-#scorePasting > textarea{resize: none;}
+#scorePasting > textarea{resize: none;
+width:100%;}
 
 .gamecard {
   background-color: #216450;
@@ -63,8 +64,22 @@ code {
   flex-direction: column;
   color: white;
 }
+
+#mainScreen{
+  width:90%;
+}
+
+#renderSection{
+  margin:0px;
+  padding:0px;
+  width:100%;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-direction: row;
+}
 .gamelist{
-  display: inline-flex;
+  display: inline-flex;  
   flex-direction: column;
 }
 
@@ -76,6 +91,14 @@ code {
   text-align: start;
   vertical-align: top;
   }
+  .countryle-points {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+    text-align: end;
+    vertical-align: top;
+    }
 
 .gamecard-emoji {
   font-size: 20px;
@@ -109,11 +132,8 @@ code {
   text-wrap: nowrap;
 }
 
-#travle-hints{
-  font-size:12px;
-}
 
-#total-points{
+.total-points{
   font-size: 30px;
   font-weight: bold;
   background: linear-gradient(45deg, #b4532a, #ad5c85, #228041, #175a70);

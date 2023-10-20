@@ -1,13 +1,5 @@
 import {useState} from 'react';
 
-// const totalScoreSum = (array, conditionValue) => {
-//     return array.reduce((accumulator, current) => {
-//       if (current['player'] === conditionValue) {
-//         return accumulator + current['score'];
-//       }
-//       return accumulator;
-//     }, 0);
-//   };
 
 const today = new Date().setHours(0,0,0,0);
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
@@ -23,21 +15,21 @@ function scoreCalc(gameObj){
     let score = 0
     if (gameObj.gameType === "worldle")
         {
-            score = 240
-            score = score - ((gameObj.attempts-1)*40)
+            score = 300
+            score = score - ((gameObj.attempts-1)*50)
             score = score + (gameObj.stars * 20)
             score = score + (gameObj.population * 10)
             score = score + (gameObj.coin * 10)
         };
     if (gameObj.gameType === "travle")
-        {
+        { let attempts = gameObj.greens+gameObj.oranges+gameObj.reds+gameObj.blacks
             if (gameObj.country === 'world')
             {
                 score = 50
-                score = score + (gameObj.greens * 20)
-                score = score - (gameObj.oranges * 5)
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 50}
+                score = score + ((gameObj.chances - attempts)*30)
                 score = score - (gameObj.reds * 10)
-                score = score - (gameObj.blacks * 20)
+                score = score - (gameObj.blacks * 25)
                 score = score - (gameObj.hints * 5)
                 if(score<0){score = 0}
                 if(gameObj.fail === true){score = 0}
@@ -45,8 +37,8 @@ function scoreCalc(gameObj){
             if (gameObj.country === 'gbr' || gameObj.country === 'irl')
             {
                 score = 30
-                score = score + (gameObj.greens * 15)
-                score = score - (gameObj.oranges * 3)
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 30}
+                score = score + ((gameObj.chances - attempts)*20)
                 score = score - (gameObj.reds * 7)
                 score = score - (gameObj.blacks * 15)
                 score = score - (gameObj.hints * 3)
@@ -56,8 +48,8 @@ function scoreCalc(gameObj){
             else if (gameObj.country === 'usa')
             {
                 score = 20
-                score = score + (gameObj.greens * 10)
-                score = score - (gameObj.oranges * 2)
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 20}
+                score = score + ((gameObj.chances - attempts)*12)
                 score = score - (gameObj.reds * 5)
                 score = score - (gameObj.blacks * 10)
                 score = score - (gameObj.hints * 2)
@@ -78,7 +70,7 @@ function scoreCalc(gameObj){
 
 
 
-function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArray, setPlayer1Score){
+function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArray){
     let gameObj = scoreParser(pastedValue, player);
     if (gameObj === 'Not Recognised'){setWarning('Not recognised. Please paste scores directly from Worldle, Travle or Countryle'); return;}
     else
@@ -94,14 +86,14 @@ function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArr
         let stringValue = String(obj.gameType+obj.day+obj.country+obj.player);
         if (!stringValues.includes(stringValue)){stringValues.push(stringValue);currentArrayUnique.unshift(obj);}
     }
-    let totalScore = 0
-    for (let obj of currentArrayUnique){
-        totalScore= totalScore +obj.score
-    }
-    setPlayer1Score(totalScore)
+
+    if (player !== 'test'){submitScoresAPI(currentArrayUnique);}
     scoreUpdater(currentArrayUnique);
 }
 
+function submitScoresAPI(){
+    
+}
 
 
 function scoreParser(pastedValue,player){
@@ -109,7 +101,7 @@ function scoreParser(pastedValue,player){
     class worldleObj {constructor(day,attempts,stars,coin,population,fail,player) {
         this.gameType = "worldle";
         this.day = day;
-        this.country = null;
+        this.country = 'world';
         this.attempts = attempts;
         this.stars = stars;
         this.coin = coin;
@@ -135,7 +127,7 @@ function scoreParser(pastedValue,player){
     class countryleObj {constructor(day,attempts,player){
         this.gameType = "countryle";
         this.day = day;
-        this.country = null;
+        this.country = 'world';
         this.attempts = attempts;
         this.player = player;
 
@@ -172,22 +164,22 @@ function scoreParser(pastedValue,player){
             if(pastedValue.substring(7,8) === '_'){
                 country = pastedValue.substring((pastedValue.indexOf('_')+1),pastedValue.indexOf(' '))
             } else {country = 'world'}
-            if(day ==! travleDay && country === 'world'){return("Wrong Day")}
-            if(day ==! travleCountryDay && country ==! 'world'){return("Wrong Day")}
+            if(day !== travleDay && country === 'world'){return("Wrong Day")}
+            if(day !== travleCountryDay && (country === 'usa' || country === 'gbr' || country === 'irl')){return("Wrong Day")}
             let greens = Number((pastedValue.match(/\u{2705}/gu)||[]).length);
             let oranges = Number((pastedValue.match(/\u{1F7E7}/gu)||[]).length);
             let reds = Number((pastedValue.match(/\u{1F7E5}/gu)||[]).length);
             let blacks = Number((pastedValue.match(/\u{2B1B}/gu)||[]).length);
             let chances = Number(pastedValue.substring((pastedValue.indexOf('/')+1),(pastedValue.lastIndexOf('(')-2)));
             let hints = Number(pastedValue.substring((pastedValue.indexOf('hint')-2),(pastedValue.indexOf('hint')-1)));
-            let travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('hint')+9+(greens+oranges+reds+blacks)))
+            let travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('https')))
             gameObj = new travleObj(day,country,greens,oranges,reds,blacks,chances,hints,fail,player,travleString)
         }
         else
             // Parsing for countryle scores
                 if(pastedValue.substring(0,10) === "#Countryle"){
-                    let day = Number(pastedValue.substring((pastedValue.indexOf(' ')+1),(pastedValue.lastindexOf('Guess')-1)))
-                    if(day ==! countryleDay){return("Wrong Day")}
+                    let day = Number(pastedValue.substring((pastedValue.indexOf(' ')+1),(pastedValue.lastIndexOf('Guess')-1)))
+                    if(day !== countryleDay){return("Wrong Day")}
                     let attempts = Number(pastedValue.substring((pastedValue.indexOf('Guessed in')+11),(pastedValue.indexOf('tries')-1)))
                     gameObj = new countryleObj(day,attempts,player)
                 }
@@ -209,7 +201,7 @@ function ScorePaster(props){
         <div>{warning}</div>
         <label id='scorePasting'>
             Paste your scores:
-            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarning, props.scoreUpdater, props.scoresArray, props.setPlayer1Score) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
+            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
         </label>
         </div>
     )
