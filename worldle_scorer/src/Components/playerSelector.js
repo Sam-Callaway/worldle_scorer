@@ -1,5 +1,5 @@
 import {useState} from 'react';
-
+import axios from 'axios';
 
 
 function handleClick(props, user1, user2){
@@ -7,8 +7,17 @@ function handleClick(props, user1, user2){
     props.setPlayer2(user2)
 }
 
-function enterPassword(setHidePasswordBox, ){
-    
+const enterPassword = async(password, currentPlayer, setHidePasswordBox) => {
+    let passwordString = String(password)
+    console.log(currentPlayer)
+    let currentPlayerString = String(currentPlayer)
+    try {
+        const response = await axios.get('http://localhost:4000/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
+        console.log('Response from API:', response.data);
+      } catch (error) {
+        console.error('Error fetching data from API:', error);
+      }
+
 }
 
 function PlayerSelector (props){
@@ -16,6 +25,10 @@ function PlayerSelector (props){
 let currentPlayer = ''
 
 const [hidePasswordBox, setHidePasswordBox] = useState(true);
+const [password, setPassword] = useState('')
+const handleInputChange = (event) => {
+    setPassword(event.target.value);
+  };
     return(
         <div>
         <h1>Worldle Scorer</h1>
@@ -31,7 +44,7 @@ const [hidePasswordBox, setHidePasswordBox] = useState(true);
             Rory
         </button>
         </div>
-        <div id='passwordBox' hidden={hidePasswordBox}><input></input><button>Submit</button></div>
+        <div id='passwordBox' hidden={hidePasswordBox}>Enter Password:<div><input value={password} onChange={handleInputChange}></input><button onClick={() => (enterPassword(password,currentPlayer,setHidePasswordBox))} className='passwordSubmitButton'>Submit</button></div></div>
         </div>
     )
 

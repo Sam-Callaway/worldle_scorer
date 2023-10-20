@@ -1,10 +1,13 @@
-function ScoreRender(props){
-    
 
+
+function ScoreRender(props){
     
     return (
         <div className="gamelist">
+        <div>
             {props.scoresArray.map(gameObj => (createScoreCard(gameObj, props.player)))}
+        </div>
+        <div id='total-points'>Total Points:{props.totalScore}</div>
         </div>
     )
 }
@@ -20,7 +23,7 @@ function createScoreCard(gameObj, player){
         let populationEmoji = '';
         let coinEmoji = '';
         let attemptsMessage = '';
-        if (gameObj.fail === true){attemptsMessage = "Failed to find!"}else{attemptsMessage = 'Found in '+gameObj.attempts+'/6'}
+        if (gameObj.fail === true){attemptsMessage = "Failed!"}else{attemptsMessage = 'Found in '+gameObj.attempts+'/6'}
         for (let i = 0; i < gameObj.stars; i++){starsEmoji+='\u2B50';};
         if (gameObj.population === 1){populationEmoji+=populationEmojiCharacter};
         if (gameObj.coin === 1){coinEmoji+=coinEmojiCharacter};
@@ -32,19 +35,40 @@ function createScoreCard(gameObj, player){
                 </div>
                 <div className='gamecard-title-area'>                            
                 <h3 className='gamecard-content' id="attempts">{attemptsMessage}</h3>
-                <h3 className='gamecard-content'>{gameObj.score} Points</h3>
                 </div>
+                <div className='gamecard-title-area'>
                 <div className='gamecard-content-area'> 
-                <h3 className='gamecard-content' id="stars">{starsEmoji}</h3>
-                <h3 className='gamecard-content' id="population">{populationEmoji}</h3>
-                <h3 className='gamecard-content' id="currency">{coinEmoji}</h3>
+                <h3 className='gamecard-emoji' id="stars">{starsEmoji}</h3>
+                <h3 className='gamecard-emoji' id="population">{populationEmoji}</h3>
+                <h3 className='gamecard-emoji' id="currency">{coinEmoji}</h3>
+                </div>
+                <h3 className='gamecard-content'>{gameObj.score} Points</h3>
                 </div>
             </div>
     )}
     if (gameObj.gameType === 'travle'){
+        let travleCountry=''
+        if(gameObj.country !== 'world'){travleCountry = '_'+gameObj.country}
+        let totalGuesses = gameObj.greens+gameObj.oranges+gameObj.reds+gameObj.blacks;
+        let hintsString = ''
+        if (gameObj.hints > 0){hintsString = gameObj.hints+' hints'}
+        if (gameObj.fail === true){totalGuesses = 'X'}
         return(
-            <div className="gamecard">
-                <h2 id="gametype">Travle</h2>
+            <div key={key} className="gamecard">
+                <div className='gamecard-title-area'>
+                <h2 className='gamecard-content' id="gametype">Travle{travleCountry}</h2>
+                <h2 className='gamecard-content' id="day">Day: {gameObj.day}</h2>
+                </div>
+                <div className='gamecard-title-area'>
+                <h2 className='travle-string'>{gameObj.travleString}</h2>
+                
+                </div>
+                <div className='gamecard-title-area'> 
+                <h2 className='gamecard-content'>{totalGuesses}/{gameObj.chances}</h2>
+                <h3 id='travle-hints' className='gamecard-content'>{hintsString}</h3>
+                <h3 className='gamecard-content'>{gameObj.score} Points</h3>
+                </div>
+            
             </div>
     )}
     if (gameObj.gameType === 'countryle'){

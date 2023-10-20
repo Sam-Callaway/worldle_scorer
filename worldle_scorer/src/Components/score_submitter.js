@@ -1,5 +1,14 @@
 import {useState} from 'react';
 
+// const totalScoreSum = (array, conditionValue) => {
+//     return array.reduce((accumulator, current) => {
+//       if (current['player'] === conditionValue) {
+//         return accumulator + current['score'];
+//       }
+//       return accumulator;
+//     }, 0);
+//   };
+
 const today = new Date().setHours(0,0,0,0);
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
 const timeDifference = today - zeroDate;
@@ -69,21 +78,27 @@ function scoreCalc(gameObj){
 
 
 
-function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArray){
+function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArray, setPlayer1Score){
     let gameObj = scoreParser(pastedValue, player);
     if (gameObj === 'Not Recognised'){setWarning('Not recognised. Please paste scores directly from Worldle, Travle or Countryle'); return;}
     else
     if (gameObj === 'Wrong Day'){setWarning('This is not today\'s game!'); return;}
     else {setWarning('')};
     gameObj.score = scoreCalc(gameObj);
+    
     let currentArray = scoresArray;
     currentArray.unshift(gameObj);
     let stringValues = [];
     let currentArrayUnique = [];
     for (let obj of currentArray){
         let stringValue = String(obj.gameType+obj.day+obj.country+obj.player);
-        if (!stringValues.includes(stringValue)){stringValues.push(stringValue);currentArrayUnique.unshift(obj)}
-    } 
+        if (!stringValues.includes(stringValue)){stringValues.push(stringValue);currentArrayUnique.unshift(obj);}
+    }
+    let totalScore = 0
+    for (let obj of currentArrayUnique){
+        totalScore= totalScore +obj.score
+    }
+    setPlayer1Score(totalScore)
     scoreUpdater(currentArrayUnique);
 }
 
@@ -102,7 +117,7 @@ function scoreParser(pastedValue,player){
         this.fail = fail;
         this.player = player;
     }}
-    class travleObj {constructor(day,country,greens,oranges,reds,blacks,chances,hints,fail,player){
+    class travleObj {constructor(day,country,greens,oranges,reds,blacks,chances,hints,fail,player,travleString){
         this.gameType = "travle";
         this.day = day;
         this.country = country;
@@ -114,6 +129,7 @@ function scoreParser(pastedValue,player){
         this.hints = hints;
         this.fail = fail;
         this.player = player;
+        this.travleString = travleString;
     }}
 
     class countryleObj {constructor(day,attempts,player){
@@ -164,7 +180,8 @@ function scoreParser(pastedValue,player){
             let blacks = Number((pastedValue.match(/\u{2B1B}/gu)||[]).length);
             let chances = Number(pastedValue.substring((pastedValue.indexOf('/')+1),(pastedValue.lastIndexOf('(')-2)));
             let hints = Number(pastedValue.substring((pastedValue.indexOf('hint')-2),(pastedValue.indexOf('hint')-1)));
-            gameObj = new travleObj(day,country,greens,oranges,reds,blacks,chances,hints,fail,player)
+            let travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('hint')+9+(greens+oranges+reds+blacks)))
+            gameObj = new travleObj(day,country,greens,oranges,reds,blacks,chances,hints,fail,player,travleString)
         }
         else
             // Parsing for countryle scores
@@ -192,7 +209,7 @@ function ScorePaster(props){
         <div>{warning}</div>
         <label id='scorePasting'>
             Paste your scores:
-            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
+            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarning, props.scoreUpdater, props.scoresArray, props.setPlayer1Score) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
         </label>
         </div>
     )
