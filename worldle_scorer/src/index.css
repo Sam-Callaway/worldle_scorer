@@ -82,6 +82,7 @@ width:100%;}
 .gamelist{
   display: inline-flex;  
   flex-direction: column;
+  width:50%;
 }
 
 .gamecard-content {
@@ -141,4 +142,48 @@ width:100%;}
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+@media only screen and (max-width: 600px) {
+ 
+.gamecard {
+  padding: 10px;
+  margin: 10px;
+
+}
+
+
+.gamelist{
+  display: inline-flex;  
+  flex-direction: column;
+  width:50%;
+}
+
+.gamecard-content {
+  font-size: 12px;
+  }
+.countryle-points {
+  font-size: 12px;
+  }
+
+.gamecard-emoji {
+  font-size: 10px;
+  }
+  
+
+
+.gamecard-content-area {
+  font-size: 8px;
+ 
+  }
+
+.travle-string{
+
+  font-size: 10px;
+}
+
+
+.total-points{
+  font-size: 15px;
+}
 }
