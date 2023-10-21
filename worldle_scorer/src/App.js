@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import ScorePaster from './Components/score_submitter';
 import { useState, useEffect } from 'react';
