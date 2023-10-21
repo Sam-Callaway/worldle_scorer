@@ -190,8 +190,8 @@ app.get('/api/password',(req,res)=>{
     } else {res.send('Password bad')}
 })
 
-app.listen(port, () => {
-  console.log(`Worldle Scorer back end listening on ${port}`)
+app.listen(process.env.PORT, () => {
+  console.log(`Worldle Scorer back end listening on ${process.env.PORT}`)
 })
 
 
