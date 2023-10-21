@@ -69,7 +69,7 @@ function scoreCalc(gameObj){
 }
 
 const submitScoresAPI = async(gameObj,player,password) => {
-    const url = 'http://localhost:4000/api/submit'
+    const url = 'https://worldle-scorer-backend.onrender.com:4000/api/submit'
     const data = {
         gameObj:gameObj,
         player:player,

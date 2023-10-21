@@ -11,7 +11,7 @@ const enterPassword = async(password, currentPlayer, setHidePasswordBox, setHide
     let passwordString = String(password)
     let currentPlayerString = String(currentPlayer)
     try {
-        const response = await axios.get('http://localhost:4000/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
+        const response = await axios.get('https://worldle-scorer-backend.onrender.com:4000/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
         if (response.data === 'Password good'){
             setHidePasswordBox(true)
             setHideSelector(true)

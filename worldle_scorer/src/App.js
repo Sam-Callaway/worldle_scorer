@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/today');
+        const response = await axios.get('https://worldle-scorer-backend.onrender.com:4000/api/today');
         let receivedData = response.data
         if (Object.keys(receivedData).length === 0) {
           receivedData = []
