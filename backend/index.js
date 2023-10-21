@@ -1,127 +1,181 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors');
-const app = express()
+const app = express();
+app.use(express.json());
 const port = 4000
 app.use(cors());
 require('dotenv').config()
 
+let today = new Date().setHours(0,0,0,0);
+
+function updateDay(){
+setTimeout(() => {
+  today = new Date().setHours(0,0,0,0); updateDay();},60000);
+}
+
+updateDay();
+const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
+const timeDifference = today - zeroDate;
+const dayDifference = timeDifference / (1000 * 60 * 60 * 24);
+const worldleDay = 636 + dayDifference
+const travleDay = 309 + dayDifference
+const travleCountryDay = 123 + dayDifference
+const countryleDay = 607 + dayDifference
+
 const mongoPassword = process.env.MONGODBPASSWORD;
-const url = 'mongodb+srv://calls002:'+mongoPassword+'@cluster0.iraeblh.mongodb.net/?retryWrites=true&w=majority';
+const url = 'mongodb+srv://calls002:'+mongoPassword+'@cluster0.iraeblh.mongodb.net/WorldleScorer?retryWrites=true&w=majority';
 
 mongoose.connect(url)
+const db = mongoose.connection;
 
-const scoresArray = [
-  {
-      "gameType": "worldle",
-      "day": 637,
-      "country": "world",
-      "attempts": 1,
-      "stars": 3,
-      "coin": 1,
-      "population": 1,
-      "fail": false,
-      "player": "sam",
-      "score": 380
-  },
-  {
-      "gameType": "travle",
-      "day": 310,
-      "country": "world",
-      "greens": 4,
-      "oranges": 1,
-      "reds": 1,
-      "blacks": 1,
-      "chances": 9,
-      "hints": 0,
-      "fail": false,
-      "player": "sam",
-      "travleString": "✅🟥🟧⬛✅✅✅",
-      "score": 75
-  },
-  {
-      "gameType": "travle",
-      "day": 124,
-      "country": "gbr",
-      "greens": 9,
-      "oranges": 1,
-      "reds": 0,
-      "blacks": 0,
-      "chances": 15,
-      "hints": 0,
-      "fail": false,
-      "player": "sam",
-      "travleString": "✅✅✅✅🟧✅✅✅✅✅\n",
-      "score": 130
-  },
-  {
-      "gameType": "countryle",
-      "day": 608,
-      "country": "world",
-      "attempts": 3,
-      "player": "sam",
-      "score": 45
-  },
-  {
-    "gameType": "worldle",
-    "day": 637,
-    "country": "world",
-    "attempts": 1,
-    "stars": 3,
-    "coin": 1,
-    "population": 1,
-    "fail": false,
-    "player": "rory",
-    "score": 380
-},
-{
-    "gameType": "travle",
-    "day": 310,
-    "country": "world",
-    "greens": 4,
-    "oranges": 1,
-    "reds": 1,
-    "blacks": 1,
-    "chances": 9,
-    "hints": 0,
-    "fail": false,
-    "player": "rory",
-    "travleString": "✅🟥🟧⬛✅✅✅",
-    "score": 75
-},
-{
-    "gameType": "travle",
-    "day": 124,
-    "country": "gbr",
-    "greens": 9,
-    "oranges": 1,
-    "reds": 0,
-    "blacks": 0,
-    "chances": 15,
-    "hints": 0,
-    "fail": false,
-    "player": "rory",
-    "travleString": "✅✅✅✅🟧✅✅✅✅✅\n",
-    "score": 130
-},
-{
-    "gameType": "countryle",
-    "day": 608,
-    "country": "world",
-    "attempts": 3,
-    "player": "rory",
-    "score": 45
-}
-]
-
-app.get('/api/today', (req, res) => {
-  res.json(scoresArray)
+const scoreSchema = new mongoose.Schema({
+  gameType:String,
+  day:Number,
+  country:String,
+  attempts:Number,
+  greens:Number,
+  oranges:Number,
+  reds:Number,
+  blacks:Number,
+  chances:Number,
+  stars:Number,
+  coin:Number,
+  population:Number,
+  fail:Boolean,
+  player:String,
+  travleString:String,
+  score:Number
 })
-app.get('api//history', (req, res) => {
+
+const Scores = mongoose.model('Scores', scoreSchema);
+
+
+
+app.get('/api/today', async (req, res) => {
+  
+  let scoresArray = await todayScores();
+  res.send(scoresArray)
+})
+
+async function todayScores(){
+  let scoresArray = []
+
+  try {
+    const worldles = await Scores.find({ gameType: 'worldle', day: worldleDay });
+    try {
+      const travles = await Scores.find({gameType:'travle', country:'world', day:travleDay});
+      try {
+        const travlecountrys = await Scores.find({gameType:'travle', country:{$ne:'world'}, day:travleCountryDay});
+        try {
+          const countryles = await Scores.find({gameType:'countryle', day:countryleDay});
+          for (let obj of worldles){
+            scoresArray.push(obj)
+          }
+          for (let obj of travles){
+            scoresArray.push(obj)
+          }
+          for (let obj of travlecountrys){
+            scoresArray.push(obj)
+          }
+          for (let obj of countryles){
+            scoresArray.push(obj)
+          }
+          return(scoresArray);
+        } catch (err) {
+          console.error(err);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  
+
+}
+
+
+app.get('/api/history', (req, res) => {
     res.send('Hello World!')
   })
-app.post('api/submit', (req, res) => {
-  res.send('Hello World!')
+
+app.post('/api/submit', async (req, res) => {
+  
+  let gameObj = req.body.gameObj
+  let player = req.body.player
+  let password = req.body.password
+  let correctPassword = ''
+  if (player === 'sam'){correctPassword = process.env.SAMPASS;} else if (player === 'rory'){correctPassword = process.env.RORYPASS;} else {res.send("Player not recognised")}
+  if (password === correctPassword){
+    if (gameObj.player !== player){res.send('Player Mismatch')}
+    try {
+      await Scores.deleteMany({ gameType:gameObj.gameType, day:gameObj.day, country:gameObj.country, player:gameObj.player});
+      console.log('Duplicates deleted successfully');
+    } catch (err) {
+      console.error(err);
+    }
+    if(gameObj.gameType === 'worldle'){
+      let saveGame = new Scores({
+        gameType:gameObj.gameType,
+        day:gameObj.day,
+        country:gameObj.country,
+        attempts:gameObj.attempts,
+        stars:gameObj.stars,
+        coin:gameObj.coin,
+        population:gameObj.population,
+        fail:gameObj.fail,
+        player:gameObj.player,
+        score:gameObj.score
+      })
+      try {
+        await saveGame.save()
+        console.log("game saved")
+      } catch (err) {console.error(err);}
+    }
+    if(gameObj.gameType === 'travle'){
+      let saveGame = new Scores({
+        gameType:gameObj.gameType,
+        day:gameObj.day,
+        country:gameObj.country,
+        attempts:gameObj.attempts,
+        greens:gameObj.greens,
+        oranges:gameObj.oranges,
+        reds:gameObj.reds,
+        blacks:gameObj.blacks,
+        chances:gameObj.chances,
+        fail:gameObj.fail,
+        player:gameObj.player,
+        travleString:gameObj.travleString,
+        score:gameObj.score
+      })
+      try {
+        await saveGame.save()
+        console.log("game saved")
+      } catch (err) {console.error(err);}
+    }
+    if(gameObj.gameType === 'countryle'){
+      let saveGame = new Scores({
+        gameType:gameObj.gameType,
+        day:gameObj.day,
+        country:gameObj.country,
+        attempts:gameObj.attempts,
+        player:gameObj.player,
+        score:gameObj.score
+      })
+      try {
+        await saveGame.save()
+        console.log("game saved")
+      } catch (err) {console.error(err);}
+    }
+
+  
+  } else {res.send('Incorrect Password')}
+  
 })
 app.get('/api/password',(req,res)=>{
     let correctPassword = ''
@@ -140,4 +194,7 @@ app.get('/api/password',(req,res)=>{
 app.listen(port, () => {
   console.log(`Worldle Scorer back end listening on ${port}`)
 })
+
+
+
 

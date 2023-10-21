@@ -3,7 +3,6 @@ import './App.css';
 import ScorePaster from './Components/score_submitter';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import InitApiCall from './Components/api_call';
 import ScoreRender from './Components/score_renderer';
 import PlayerSelector from './Components/playerSelector';
 
@@ -23,7 +22,12 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:4000/api/today');
-        setScoresArray(response.data);
+        let receivedData = response.data
+        if (Object.keys(receivedData).length === 0) {
+          receivedData = []
+        }
+
+        setScoresArray(receivedData);
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -49,7 +53,7 @@ function App() {
         <ScoreRender scoresArray={scoresArray} player={player1} ></ScoreRender>
         <ScoreRender scoresArray={scoresArray} player={player2} ></ScoreRender>
           </div>
-        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
+        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
           </div>
         <div hidden={hideTestMode}>
         <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>

@@ -56,7 +56,7 @@ function createScoreCard(gameObj, player){
     if (gameObj.gameType === 'travle'){
         let travleCountry=''
         if(gameObj.country !== 'world'){travleCountry = '_'+gameObj.country}
-        let totalGuesses = gameObj.greens+gameObj.oranges+gameObj.reds+gameObj.blacks;
+        let totalGuesses = gameObj.attempts;
         let hintsString = ''
         if (gameObj.hints > 0){hintsString = gameObj.hints+' hints'}
         if (gameObj.fail === true){totalGuesses = 'X'}

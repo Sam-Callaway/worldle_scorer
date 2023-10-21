@@ -1,5 +1,5 @@
 import {useState} from 'react';
-
+import axios from 'axios';
 
 const today = new Date().setHours(0,0,0,0);
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
@@ -68,16 +68,32 @@ function scoreCalc(gameObj){
     return (score);
 }
 
+const submitScoresAPI = async(gameObj,player,password) => {
+    const url = 'http://localhost:4000/api/submit'
+    const data = {
+        gameObj:gameObj,
+        player:player,
+        password:password
+    }
+    
+    try{
+        console.log(data)
+        const response = await axios.post(url,data)
+        console.log('Status:', response.status);
+        console.log('Body:', response.data);
+    } catch (error){
+        console.error('Error:',error)
+    }
+}
 
-
-function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArray){
+function ScoreSubmitter(pastedValue, player, masterPassword, setWarning, scoreUpdater, scoresArray){
     let gameObj = scoreParser(pastedValue, player);
     if (gameObj === 'Not Recognised'){setWarning('Not recognised. Please paste scores directly from Worldle, Travle or Countryle'); return;}
     else
     if (gameObj === 'Wrong Day'){setWarning('This is not today\'s game!'); return;}
     else {setWarning('')};
     gameObj.score = scoreCalc(gameObj);
-    
+    if (player !== 'test'){submitScoresAPI(gameObj,player,masterPassword);}
     let currentArray = scoresArray;
     currentArray.unshift(gameObj);
     let stringValues = [];
@@ -86,13 +102,7 @@ function ScoreSubmitter(pastedValue, player, setWarning, scoreUpdater, scoresArr
         let stringValue = String(obj.gameType+obj.day+obj.country+obj.player);
         if (!stringValues.includes(stringValue)){stringValues.push(stringValue);currentArrayUnique.unshift(obj);}
     }
-
-    if (player !== 'test'){submitScoresAPI(currentArrayUnique);}
     scoreUpdater(currentArrayUnique);
-}
-
-function submitScoresAPI(){
-    
 }
 
 
@@ -109,7 +119,7 @@ function scoreParser(pastedValue,player){
         this.fail = fail;
         this.player = player;
     }}
-    class travleObj {constructor(day,country,greens,oranges,reds,blacks,chances,hints,fail,player,travleString){
+    class travleObj {constructor(day,country,greens,oranges,reds,blacks,attempts,chances,hints,fail,player,travleString){
         this.gameType = "travle";
         this.day = day;
         this.country = country;
@@ -117,6 +127,7 @@ function scoreParser(pastedValue,player){
         this.oranges = oranges;
         this.reds = reds;
         this.blacks = blacks;
+        this.attempts = attempts;
         this.chances = chances;
         this.hints = hints;
         this.fail = fail;
@@ -170,10 +181,11 @@ function scoreParser(pastedValue,player){
             let oranges = Number((pastedValue.match(/\u{1F7E7}/gu)||[]).length);
             let reds = Number((pastedValue.match(/\u{1F7E5}/gu)||[]).length);
             let blacks = Number((pastedValue.match(/\u{2B1B}/gu)||[]).length);
+            let attempts = greens+oranges+reds+blacks
             let chances = Number(pastedValue.substring((pastedValue.indexOf('/')+1),(pastedValue.lastIndexOf('(')-2)));
             let hints = Number(pastedValue.substring((pastedValue.indexOf('hint')-2),(pastedValue.indexOf('hint')-1)));
             let travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('https')))
-            gameObj = new travleObj(day,country,greens,oranges,reds,blacks,chances,hints,fail,player,travleString)
+            gameObj = new travleObj(day,country,greens,oranges,reds,blacks,attempts,chances,hints,fail,player,travleString)
         }
         else
             // Parsing for countryle scores
@@ -201,7 +213,7 @@ function ScorePaster(props){
         <div>{warning}</div>
         <label id='scorePasting'>
             Paste your scores:
-            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
+            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, props.masterPassword, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
         </label>
         </div>
     )
