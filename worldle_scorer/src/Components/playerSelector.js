@@ -10,8 +10,9 @@ function handleClick(setPlayer1,setPlayer2, user1, user2){
 const enterPassword = async(password, currentPlayer, setHidePasswordBox, setHideSelector, setHideScoring, setHidePasswordWarning, setPlayer1, setPlayer2, setMasterPassword) => {
     let passwordString = String(password)
     let currentPlayerString = String(currentPlayer)
+    console.log("checking password")
     try {
-        const response = await axios.get('https://worldle-scorer-backend.onrender.com:4000/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
+        const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
         if (response.data === 'Password good'){
             setHidePasswordBox(true)
             setHideSelector(true)
