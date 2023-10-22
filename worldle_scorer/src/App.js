@@ -5,6 +5,10 @@ import axios from 'axios';
 import ScoreRender from './Components/score_renderer';
 import PlayerSelector from './Components/playerSelector';
 
+function handleClick(setPlayer1,setPlayer2, user1, user2){
+  setPlayer1(user1)
+  setPlayer2(user2)
+}
 
 
 function App() {
@@ -12,7 +16,7 @@ function App() {
   const [player1,setPlayer1] = useState('test');
   const [player2,setPlayer2] = useState('none');
   const [masterPassword, setMasterPassword] = useState('');
-  const [hideSelector, setHideSelector] = useState(false);
+  const [hideSelector, setHideSelector] = useState(true);
   const [hideScoring, setHideScoring] = useState(true);
   const [hideTestMode, setHideTestMode] = useState(true);
 
@@ -31,6 +35,25 @@ function App() {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+      if (localStorage.getItem('user') === 'rory' || 'sam'){
+      try {
+        const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/password?currentplayer='+localStorage.getItem('user')+'&password='+localStorage.getItem('masterPassword'));
+        if (response.data === 'Password good'){
+            setHideSelector(true)
+            setHideScoring(false)
+            setMasterPassword(localStorage.getItem('masterPassword'))
+            if (localStorage.getItem('user') === 'sam'){handleClick(setPlayer1,setPlayer2,'sam','rory')}
+            if (localStorage.getItem('user') === 'rory'){handleClick(setPlayer1,setPlayer2,'rory','sam')}
+            return; 
+        } else 
+        if (response.data === 'Password bad'){
+          setHideSelector(false);
+            return;
+        }
+      } catch (error) {
+        console.error('Error fetching data from API:', error);
+        setHideSelector(false);
+      }}else{setHideSelector(false);}
     };
 
     fetchData();

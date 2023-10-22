@@ -19,6 +19,8 @@ const enterPassword = async(password, currentPlayer, setHidePasswordBox, setHide
             setHideScoring(false)
             setHidePasswordWarning(true)
             setMasterPassword(password)
+            localStorage.setItem('user',currentPlayer)
+            localStorage.setItem('masterPassword',password)
             if (currentPlayer === 'sam'){handleClick(setPlayer1,setPlayer2,'sam','rory')}
             if (currentPlayer === 'rory'){handleClick(setPlayer1,setPlayer2,'rory','sam')}
             return; 

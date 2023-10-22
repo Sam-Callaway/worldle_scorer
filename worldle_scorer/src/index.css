@@ -59,8 +59,8 @@ width:100%;}
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin: 20px;
-  width:95%;
+  margin-top: 5px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: column;
   color: white;
@@ -147,7 +147,7 @@ width:100%;}
 @media only screen and (max-width: 600px) {
  
 .gamecard {
-  padding: 10px;
+  padding:3px;
   margin: 10px;
 
 }
