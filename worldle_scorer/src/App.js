@@ -27,6 +27,7 @@ function App() {
       try {
         const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/today');
         console.log('data received')
+        console.log(response.data)
         let receivedData = response.data
         if (Object.keys(receivedData).length === 0) {
           receivedData = []
@@ -38,6 +39,7 @@ function App() {
         console.error('Error fetching data:', error);
       }
       if (localStorage.getItem('user') === 'rory' || 'sam'){
+        console.log("user is" + localStorage.getItem('user'))
         console.log("user found")
       try {
         const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/password?currentplayer='+localStorage.getItem('user')+'&password='+localStorage.getItem('masterPassword'));
@@ -50,6 +52,10 @@ function App() {
             return; 
         } else 
         if (response.data === 'Password bad'){
+          setHideSelector(false);
+            return;
+        }
+        if (response.data === 'Player not recognised'){
           setHideSelector(false);
             return;
         }
