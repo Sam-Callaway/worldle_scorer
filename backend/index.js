@@ -49,6 +49,10 @@ const scoreSchema = new mongoose.Schema({
 
 const Scores = mongoose.model('Scores', scoreSchema);
 
+app.get('/api/hello', (req, res) => {
+  res.send('Hello World!')
+  console.log('Hello I am awake')
+})
 
 
 app.get('/api/today', async (req, res) => {
