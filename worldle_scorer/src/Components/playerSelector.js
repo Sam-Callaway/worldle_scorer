@@ -50,13 +50,13 @@ const handleInputChange = (event) => {
         <h1>Worldle Scorer</h1>
         <h3>Who are you?</h3>
         <div id='playerButtonGrid'>
-        <button className='playerSelectButton' onClick={() => (props.setHideTestMode(false), props.setHideSelector(true))}>
+        <button className='playerSelectButton' onClick={() => {props.setHideTestMode(false); props.setHideSelector(true)}}>
             Just testing it out
         </button>
-        <button className='playerSelectButton' onClick={() => (setHidePasswordBox(false), setCurrentPlayer('sam'))}>
+        <button className='playerSelectButton' onClick={() => {setHidePasswordBox(false); setCurrentPlayer('sam')}}>
             Sam
         </button>
-        <button className='playerSelectButton' onClick={() => (setHidePasswordBox(false), setCurrentPlayer('rory'))}>
+        <button className='playerSelectButton' onClick={() => {setHidePasswordBox(false); setCurrentPlayer('rory')}}>
             Rory
         </button>
         </div>
