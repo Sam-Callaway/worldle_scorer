@@ -10,7 +10,7 @@ let today = new Date().setHours(0,0,0,0);
 
 function updateDay(){
 setTimeout(() => {
-  today = new Date().setHours(0,0,0,0); updateDay();},60000);
+  today = new Date().setHours(0,0,0,0); updateDay();},10000);
 }
 
 updateDay();

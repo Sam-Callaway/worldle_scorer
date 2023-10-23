@@ -11,6 +11,7 @@ const travleCountryDay = 123 + dayDifference
 const countryleDay = 607 + dayDifference
 
 
+
 function scoreCalc(gameObj){
     let score = 0
     if (gameObj.gameType === "worldle")
@@ -167,6 +168,7 @@ function scoreParser(pastedValue,player){
     // Parsing for travle scores
         if (pastedValue.substring(0,7) === '#travle'){
             let country = '';
+            let travleString = '';
             let fail = false
             if ((pastedValue.substring((pastedValue.indexOf('/')-1),(pastedValue.indexOf('/')))) === '?'){
                 fail = true;   
@@ -184,7 +186,12 @@ function scoreParser(pastedValue,player){
             let attempts = greens+oranges+reds+blacks
             let chances = Number(pastedValue.substring((pastedValue.indexOf('/')+1),(pastedValue.lastIndexOf('(')-2)));
             let hints = Number(pastedValue.substring((pastedValue.indexOf('hint')-2),(pastedValue.indexOf('hint')-1)));
-            let travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('https')))
+            if (fail === true){
+                travleString = travleString = pastedValue.substring((pastedValue.indexOf('away')+7),(pastedValue.indexOf('https')))
+            }else{
+                travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('https')))
+            }
+            
             gameObj = new travleObj(day,country,greens,oranges,reds,blacks,attempts,chances,hints,fail,player,travleString)
         }
         else
@@ -205,7 +212,7 @@ function scoreParser(pastedValue,player){
 function ScorePaster(props){
     const [postContent, setPostContent] = useState('');
     const [warning, setWarning] = useState('');
-
+    
     
        
     return (
