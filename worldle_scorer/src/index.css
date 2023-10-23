@@ -59,6 +59,7 @@ width:100%;}
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  margin: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
   display: flex;
@@ -83,6 +84,7 @@ width:100%;}
   display: inline-flex;  
   flex-direction: column;
   width:50%;
+  max-width:600px;
 }
 
 .gamecard-content {
@@ -144,7 +146,7 @@ width:100%;}
   color: transparent;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
  
 .gamecard {
   padding:3px;
