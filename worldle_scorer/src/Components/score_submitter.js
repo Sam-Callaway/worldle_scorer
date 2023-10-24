@@ -27,7 +27,7 @@ function scoreCalc(gameObj){
             if (gameObj.country === 'world')
             {
                 score = 50
-                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 50}
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 25}
                 score = score + ((gameObj.chances - attempts)*30)
                 score = score - (gameObj.reds * 10)
                 score = score - (gameObj.blacks * 25)
@@ -38,7 +38,7 @@ function scoreCalc(gameObj){
             if (gameObj.country === 'gbr' || gameObj.country === 'irl')
             {
                 score = 30
-                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 30}
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 15}
                 score = score + ((gameObj.chances - attempts)*20)
                 score = score - (gameObj.reds * 7)
                 score = score - (gameObj.blacks * 15)
@@ -49,7 +49,7 @@ function scoreCalc(gameObj){
             else if (gameObj.country === 'usa')
             {
                 score = 20
-                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 20}
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 10}
                 score = score + ((gameObj.chances - attempts)*12)
                 score = score - (gameObj.reds * 5)
                 score = score - (gameObj.blacks * 10)
