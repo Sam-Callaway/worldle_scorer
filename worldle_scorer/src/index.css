@@ -146,6 +146,19 @@ width:100%;}
   color: transparent;
 }
 
+#testgap{
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: bottom;
+  
+}
+
+#testgap > div{
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media only screen and (max-width: 800px) {
  
 .gamecard {

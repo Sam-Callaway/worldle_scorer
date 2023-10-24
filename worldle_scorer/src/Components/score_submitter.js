@@ -11,7 +11,28 @@ const travleCountryDay = 123 + dayDifference
 const countryleDay = 607 + dayDifference
 
 
+// This is the parent function that holds the text area player pastes scores into
+function ScorePaster(props){
+    const [postContent, setPostContent] = useState('');
+    const [warning, setWarning] = useState('');
+    
+    
+       
+    return (
+        <div>
+        <div>{warning}</div>
+        <label id='scorePasting'>
+            Paste your scores:
+            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, props.masterPassword, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
+        </label>
+        </div>
+    )
+    
+}
 
+
+
+// This function calculates how many points a game earned and adds that to the game object
 function scoreCalc(gameObj){
     let score = 0
     if (gameObj.gameType === "worldle")
@@ -27,7 +48,8 @@ function scoreCalc(gameObj){
             if (gameObj.country === 'world')
             {
                 score = 50
-                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 50}
+                // There's a bonus on travle for getting the route with all greens. (shortest possible route)
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 25}
                 score = score + ((gameObj.chances - attempts)*30)
                 score = score - (gameObj.reds * 10)
                 score = score - (gameObj.blacks * 25)
@@ -38,7 +60,7 @@ function scoreCalc(gameObj){
             if (gameObj.country === 'gbr' || gameObj.country === 'irl')
             {
                 score = 30
-                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 30}
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 15}
                 score = score + ((gameObj.chances - attempts)*20)
                 score = score - (gameObj.reds * 7)
                 score = score - (gameObj.blacks * 15)
@@ -49,7 +71,7 @@ function scoreCalc(gameObj){
             else if (gameObj.country === 'usa')
             {
                 score = 20
-                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 20}
+                if ((gameObj.oranges+gameObj.reds+gameObj.blacks) === 0){score = score + 10}
                 score = score + ((gameObj.chances - attempts)*12)
                 score = score - (gameObj.reds * 5)
                 score = score - (gameObj.blacks * 10)
@@ -69,6 +91,7 @@ function scoreCalc(gameObj){
     return (score);
 }
 
+// This function sends the gameObj to the back end to be saved on the database. If the player submits the same game twice the function on the back end deletes the previous submit.
 const submitScoresAPI = async(gameObj,player,password) => {
     const url = 'https://worldle-scorer-backend.onrender.com/api/submit'
     const data = {
@@ -87,15 +110,23 @@ const submitScoresAPI = async(gameObj,player,password) => {
     }
 }
 
+// This is the main function that is coordinating this process.
 function ScoreSubmitter(pastedValue, player, masterPassword, setWarning, scoreUpdater, scoresArray){
+    // First, pass the pasted value into the scoreParser which reads the text and turns it into a usable object
     let gameObj = scoreParser(pastedValue, player);
+    // Check if there is a valid response from the parser and if not send warning to player
     if (gameObj === 'Not Recognised'){setWarning('Not recognised. Please paste scores directly from Worldle, Travle or Countryle'); return;}
     else
     if (gameObj === 'Wrong Day'){setWarning('This is not today\'s game!'); return;}
     else {setWarning('')};
+    // Pass the gameObj into the scoreCalc to assign points to is
     gameObj.score = scoreCalc(gameObj);
+    // If the player isn't in test mode then we send the score to the API to be saved to the database
     if (player !== 'test'){submitScoresAPI(gameObj,player,masterPassword);}
+    // We don't want any duplicate games so in the below we remove duplicates
+    // The back end is also removing duplicates when saving to the database but doing it here as well means I don't have to retrieve the scoresArray from the back end again every time a game is submitted
     let currentArray = scoresArray;
+    // Unshift here because I want the new game to be at the front so if it is a duplicate then the older one will be removed
     currentArray.unshift(gameObj);
     let stringValues = [];
     let currentArrayUnique = [];
@@ -103,10 +134,13 @@ function ScoreSubmitter(pastedValue, player, masterPassword, setWarning, scoreUp
         let stringValue = String(obj.gameType+obj.day+obj.country+obj.player);
         if (!stringValues.includes(stringValue)){stringValues.push(stringValue);currentArrayUnique.unshift(obj);}
     }
+    // Set the stateful scoresArray that is passed into the renderer to be our unique list of games.
     scoreUpdater(currentArrayUnique);
 }
 
-
+// This function is taking what the user is pasting in and firstly checking if it is pasted from one of the games.
+// Then parse the text to find the information we need.
+// This is somewhat dependent on the games not changing the format of their pastes hopefully.
 function scoreParser(pastedValue,player){
     let gameObj;
     class worldleObj {constructor(day,attempts,stars,coin,population,fail,player) {
@@ -209,23 +243,7 @@ function scoreParser(pastedValue,player){
 
 }
 
-function ScorePaster(props){
-    const [postContent, setPostContent] = useState('');
-    const [warning, setWarning] = useState('');
-    
-    
-       
-    return (
-        <div>
-        <div>{warning}</div>
-        <label id='scorePasting'>
-            Paste your scores:
-            <textarea value={postContent} onInput={e => ScoreSubmitter(e.target.value, props.player, props.masterPassword, setWarning, props.scoreUpdater, props.scoresArray) + setPostContent('')} name="pasteScores" rows={4} cols={40}></textarea>
-        </label>
-        </div>
-    )
-    
-}
+
 
 export default ScorePaster;
 

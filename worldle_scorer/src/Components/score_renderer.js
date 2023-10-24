@@ -1,5 +1,5 @@
 
-
+// This function renders the scores that are saved in scoresArray. It also totals up the scores to present at the bottom.
 function ScoreRender(props){
     let thisPlayer = ''
     if (props.player === 'sam'){thisPlayer = 'Sam'};
@@ -22,6 +22,7 @@ function ScoreRender(props){
 const coinEmojiCharacter = String.fromCodePoint(0x1FA99)
 const populationEmojiCharacter = String.fromCodePoint(0x1F3D9)
 
+// For each score we create a card below. The different games need different formats of card.
 function createScoreCard(gameObj, player){
     let key = String(gameObj.gametype)+String(gameObj.day)+String(gameObj.country)+String(gameObj.player)
     if (gameObj.player === player){

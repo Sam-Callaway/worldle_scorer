@@ -20,9 +20,10 @@ function App() {
   const [hideScoring, setHideScoring] = useState(true);
   const [hideTestMode, setHideTestMode] = useState(true);
 
-  
+  // This function is called on App render.
   useEffect(() => {
     console.log('initial start')
+    // Retrieve the scores for the day from  the back end
     const fetchData = async () => {
       try {
         const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/today');
@@ -38,6 +39,8 @@ function App() {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+      // Check if this is one of the two players returning and check the password saved in local storage. If it all checks out then skip the first menu and go to the screen for entering scores.
+      // I know it isn't 100% secure to be keeping the 'user name' and password in local storage plaintext. However, they're just passwords I made up specifically for this and there's not much at stake really with this website.
       if (localStorage.getItem('user') === 'rory' || 'sam'){
         console.log("user is" + localStorage.getItem('user'))
         console.log("user found")
@@ -51,6 +54,7 @@ function App() {
             if (localStorage.getItem('user') === 'rory'){handleClick(setPlayer1,setPlayer2,'rory','sam')}
             return; 
         } else 
+        // If the password or user details are bad or there is nothing saved then we show the player selector screen
         if (response.data === 'Password bad'){
           setHideSelector(false);
             return;
@@ -89,9 +93,17 @@ function App() {
         <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
           </div>
         <div hidden={hideTestMode}>
+        <div id='testgap'>
         <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>
-          <h2>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results below</h2>
+        </div>
         <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
+          <h2>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h2>
+          
+          <h2>These are our scores today:</h2>
+          <div id='renderSection'>
+        <ScoreRender scoresArray={scoresArray} player={'sam'} ></ScoreRender>
+        <ScoreRender scoresArray={scoresArray} player={'rory'} ></ScoreRender>
+          </div>
         </div>
       </header>
     </div>
