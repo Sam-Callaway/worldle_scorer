@@ -7,6 +7,7 @@ function handleClick(setPlayer1,setPlayer2, user1, user2){
     setPlayer2(user2)
 }
 
+// Function to send the password the user has entered to the back end to check it is correct
 const enterPassword = async(password, currentPlayer, setHidePasswordBox, setHideSelector, setHideScoring, setHidePasswordWarning, setPlayer1, setPlayer2, setMasterPassword) => {
     let passwordString = String(password)
     let currentPlayerString = String(currentPlayer)

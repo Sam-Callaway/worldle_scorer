@@ -181,6 +181,7 @@ function scoreParser(pastedValue,player){
     pastedValue = String(pastedValue)
     // Parsing for Worldle scores
     if (pastedValue.substring(0,8) === "#Worldle"){
+        try{
         let attempts;
         let fail = false;
         let day = Number(pastedValue.substring(10,13));
@@ -196,11 +197,14 @@ function scoreParser(pastedValue,player){
         let coin = (pastedValue.match(/\u{1FA99}/gu)||[]).length;
         let population = (pastedValue.match(/\u{1F3D9}/gu)||[]).length;
         gameObj = new worldleObj(day,attempts,stars,coin,population,fail,player)
-
+        } catch(err){
+            {return("Not Recognised")}
+        }
     }
     else
     // Parsing for travle scores
         if (pastedValue.substring(0,7) === '#travle'){
+            try{
             let country = '';
             let travleString = '';
             let fail = false
@@ -224,17 +228,23 @@ function scoreParser(pastedValue,player){
                 travleString = travleString = pastedValue.substring((pastedValue.indexOf('away')+7),(pastedValue.indexOf('https')))
             }else{
                 travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('https')))
-            }
-            
+            }            
             gameObj = new travleObj(day,country,greens,oranges,reds,blacks,attempts,chances,hints,fail,player,travleString)
+            } catch(err){
+                {return("Not Recognised")}
+            }
         }
         else
             // Parsing for countryle scores
                 if(pastedValue.substring(0,10) === "#Countryle"){
+                    try{
                     let day = Number(pastedValue.substring((pastedValue.indexOf(' ')+1),(pastedValue.lastIndexOf('Guess')-1)))
                     if(day !== countryleDay){return("Wrong Day")}
                     let attempts = Number(pastedValue.substring((pastedValue.indexOf('Guessed in')+11),(pastedValue.indexOf('tries')-1)))
                     gameObj = new countryleObj(day,attempts,player)
+                    } catch(err){
+                        {return("Not Recognised")}
+                    }
                 }
                 else
                     {return("Not Recognised")}
