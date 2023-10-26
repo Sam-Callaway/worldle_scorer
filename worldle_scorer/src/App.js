@@ -4,10 +4,28 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ScoreRender from './Components/score_renderer';
 import PlayerSelector from './Components/playerSelector';
+import History from './Components/history';
 
 function handleClick(setPlayer1,setPlayer2, user1, user2){
   setPlayer1(user1)
   setPlayer2(user2)
+}
+
+function historyButtonToggle(hideHistory, player1, setHideHistory,setHideScoring,setHideSelector,setHideTestMode){
+    if(hideHistory === true){
+      setHideHistory(false);
+      setHideScoring(true);
+      setHideSelector(true);
+      setHideTestMode(true);
+
+    }else
+    {setHideHistory(true);
+      console.log(player1)
+      if(player1 === 'sam' || player1 === 'rory'){
+      setHideScoring(false);
+      } else
+      {setHideSelector(false)}
+    }
 }
 
 
@@ -19,6 +37,7 @@ function App() {
   const [hideSelector, setHideSelector] = useState(true);
   const [hideScoring, setHideScoring] = useState(true);
   const [hideTestMode, setHideTestMode] = useState(true);
+  const [hideHistory, setHideHistory] = useState(true);
 
   // This function is called on App render.
   useEffect(() => {
@@ -41,7 +60,7 @@ function App() {
       }
       // Check if this is one of the two players returning and check the password saved in local storage. If it all checks out then skip the first menu and go to the screen for entering scores.
       // I know it isn't 100% secure to be keeping the 'user name' and password in local storage plaintext. However, they're just passwords I made up specifically for this and there's not much at stake really with this website.
-      if (localStorage.getItem('user') === 'rory' || 'sam'){
+      if (localStorage.getItem('user') === 'rory' || localStorage.getItem('user') === 'sam'){
         console.log("user is" + localStorage.getItem('user'))
         console.log("user found")
       try {
@@ -74,39 +93,45 @@ function App() {
     fetchData();
   }, []);
   
-  
+  let historyButtonText = ''
+
+  if (hideHistory === true){historyButtonText = 'Show History'}else{historyButtonText = 'Go Back'}
 
 
 
   return (
-    <div className="App">
-      
-      <header className="App-header">
-        <div hidden={hideSelector}>
+<div className="App">
+
+  <header className="App-header">
+    <div hidden={hideSelector}>
       <PlayerSelector setHideTestMode = {setHideTestMode} setHideScoring={setHideScoring} setHideSelector={setHideSelector} setPlayer1={setPlayer1} setPlayer2={setPlayer2} setMasterPassword={setMasterPassword}></PlayerSelector>
-        </div>
-        <div id='mainScreen' hidden={hideScoring}>
-          <div id='renderSection'>
-        <ScoreRender scoresArray={scoresArray} player={player1} ></ScoreRender>
-        <ScoreRender scoresArray={scoresArray} player={player2} ></ScoreRender>
-          </div>
-        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
-          </div>
-        <div hidden={hideTestMode}>
-        <div id='testgap'>
+    </div>
+    <div id='mainScreen' hidden={hideScoring}>
+    <div id='renderSection'>
+      <ScoreRender scoresArray={scoresArray} player={player1} ></ScoreRender>
+      <ScoreRender scoresArray={scoresArray} player={player2} ></ScoreRender>
+    </div>
+      <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
+    </div>
+    <div hidden={hideTestMode}>
+      <div id='testgap'>
         <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>
-        </div>
-        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
-          <h2>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h2>
-          
-          <h2>These are our scores today:</h2>
-          <div id='renderSection'>
+      </div>
+      <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
+      <h3>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h3>
+
+      <h3>These are our scores today:</h3>
+      <div id='renderSection'>
         <ScoreRender scoresArray={scoresArray} player={'sam'} ></ScoreRender>
         <ScoreRender scoresArray={scoresArray} player={'rory'} ></ScoreRender>
-          </div>
-        </div>
-      </header>
+      </div>
     </div>
+    <button id='historyButton' onClick={() => historyButtonToggle(hideHistory, player1, setHideHistory,setHideScoring,setHideSelector,setHideTestMode)}>{historyButtonText}</button>
+    <div id='historyScreen'>
+      <History></History>
+    </div>
+  </header>
+</div>
   );
   
 }

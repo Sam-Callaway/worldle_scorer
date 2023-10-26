@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-.playerSelectButton{
+button {
     margin: 20px;
     padding: 10px 20px;
     font-size: 16px;
@@ -33,7 +33,7 @@ code {
   text-decoration: none;
   transition: all 0.3s ease;
 }
-.playerSelectButton:hover {
+button:hover {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
@@ -133,7 +133,6 @@ width:100%;}
   padding: 0px;
   margin: 0px;
   font-size: 20px;
-  text-wrap: nowrap;
 }
 
 
