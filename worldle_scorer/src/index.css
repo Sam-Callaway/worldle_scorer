@@ -69,6 +69,7 @@ width:100%;}
 
 #mainScreen{
   width:90%;
+  max-width:1500px;
 }
 
 #renderSection{
@@ -159,6 +160,10 @@ width:100%;}
 }
 
 @media only screen and (max-width: 800px) {
+
+#mainScreen{
+  width:100%;
+}
  
 .gamecard {
   padding:3px;
