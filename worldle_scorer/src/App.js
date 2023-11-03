@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ScoreRender from './Components/score_renderer';
 import PlayerSelector from './Components/playerSelector';
+import CopyScoresButton from './Components/copyScoresButton';
 
 function handleClick(setPlayer1,setPlayer2, user1, user2){
   setPlayer1(user1)
@@ -87,11 +88,12 @@ function App() {
         </div>
         <div id='mainScreen' hidden={hideScoring}>
           <div id='renderSection'>
-        <ScoreRender scoresArray={scoresArray} player={player1} ></ScoreRender>
-        <ScoreRender scoresArray={scoresArray} player={player2} ></ScoreRender>
+          <ScoreRender scoresArray={scoresArray} player={player1} ></ScoreRender>
+          <ScoreRender scoresArray={scoresArray} player={player2} ></ScoreRender>
           </div>
-        <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
-          </div>
+          <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
+          <CopyScoresButton scoresArray={scoresArray} player={player1}></CopyScoresButton>
+        </div>
         <div hidden={hideTestMode}>
         <div id='testgap'>
         <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>
