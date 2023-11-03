@@ -34,6 +34,7 @@ function createText(scoresArray, player){
             }
         }
     }
+    if (scoresText !== ''){scoresText = scoresText + "Total Score: "+totalScore}
     scoresToClipboard(scoresText)
 
 }
