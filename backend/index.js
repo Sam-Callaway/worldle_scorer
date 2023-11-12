@@ -16,7 +16,7 @@ setTimeout(() => {
 updateDay();
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
 const timeDifference = today - zeroDate;
-const dayDifference = timeDifference / (1000 * 60 * 60 * 24);
+const dayDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
 const worldleDay = 636 + dayDifference
 const travleDay = 309 + dayDifference
 const travleCountryDay = 123 + dayDifference

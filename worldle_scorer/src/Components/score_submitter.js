@@ -4,13 +4,13 @@ import axios from 'axios';
 const today = new Date().setHours(0,0,0,0);
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
 const timeDifference = today - zeroDate;
-const dayDifference = timeDifference / (1000 * 60 * 60 * 24);
+const dayDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24))
 const worldleDay = 636 + dayDifference
 const travleDay = 309 + dayDifference
 const travleCountryDay = 123 + dayDifference
 const countryleDay = 607 + dayDifference
 
-
+console.log("day difference is "+dayDifference)
 // This is the parent function that holds the text area player pastes scores into
 function ScorePaster(props){
     const [postContent, setPostContent] = useState('');
