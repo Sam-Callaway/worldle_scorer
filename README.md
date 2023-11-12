@@ -21,6 +21,8 @@ A history section with analysis of past results
 
 Improving the appearance
 
+Possibly - Logins so others can play, compete and save their history. Although it's easy to falsify results as they are just pasted in from text.
+
 ## Technologies
 
 Developed using React, Axios, Node on the backend and MongoDB
