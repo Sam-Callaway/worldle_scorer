@@ -14,15 +14,21 @@ function createText(scoresArray, player){
             totalScore = totalScore + gameObj.score
             let currentText = ''
             if (gameObj.gameType === 'worldle'){
-                currentText = "Worldle ("+gameObj.attempts+"/6) "+gameObj.score+" Points\n";
+                let attempts = gameObj.attempts;
+                if (attempts === 7){attempts = 'X'};
+                currentText = "Worldle ("+attempts+"/6) "+gameObj.score+" Points\n";
                 scoresText = scoresText + currentText;
             }
             if (gameObj.gameType === 'travle'){
                 if (gameObj.country === 'world'){
-                    currentText = "Travle ("+gameObj.attempts+"/"+gameObj.chances+") "+gameObj.score+" Points\n";
+                    let attempts = gameObj.attempts;
+                    if (gameObj.fail === true){attempts = 'X'}
+                    currentText = "Travle ("+attempts+"/"+gameObj.chances+") "+gameObj.score+" Points\n";
                     scoresText = scoresText + currentText;
                 } else {
-                    currentText = "Travle_"+gameObj.country+" ("+gameObj.attempts+"/"+gameObj.chances+") "+gameObj.score+" Points\n";
+                    let attempts = gameObj.attempts;
+                    if (gameObj.fail === true){attempts = 'X'}
+                    currentText = "Travle_"+gameObj.country+" ("+attempts+"/"+gameObj.chances+") "+gameObj.score+" Points\n";
                     scoresText = scoresText + currentText; 
                 }
                 

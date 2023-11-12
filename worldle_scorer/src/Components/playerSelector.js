@@ -1,6 +1,9 @@
 import {useState} from 'react';
 import axios from 'axios';
 
+const masterUrl = 'https://worldle-scorer-backend.onrender.com';
+//const masterUrl = 'http://localhost:3000';
+
 
 function handleClick(setPlayer1,setPlayer2, user1, user2){
     setPlayer1(user1)
@@ -13,7 +16,7 @@ const enterPassword = async(password, currentPlayer, setHidePasswordBox, setHide
     let currentPlayerString = String(currentPlayer)
     console.log("checking password")
     try {
-        const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
+        const response = await axios.get(masterUrl+'/api/password?currentplayer='+currentPlayerString+'&password='+passwordString);
         if (response.data === 'Password good'){
             setHidePasswordBox(true)
             setHideSelector(true)

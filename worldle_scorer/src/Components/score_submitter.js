@@ -1,6 +1,9 @@
 import {useState} from 'react';
 import axios from 'axios';
 
+const masterUrl = 'https://worldle-scorer-backend.onrender.com';
+//const masterUrl = 'http://localhost:3000';
+
 const today = new Date().setHours(0,0,0,0);
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
 const timeDifference = today - zeroDate;
@@ -9,6 +12,8 @@ const worldleDay = 636 + dayDifference
 const travleDay = 309 + dayDifference
 const travleCountryDay = 123 + dayDifference
 const countryleDay = 607 + dayDifference
+
+
 
 console.log("day difference is "+dayDifference)
 // This is the parent function that holds the text area player pastes scores into
@@ -93,7 +98,7 @@ function scoreCalc(gameObj){
 
 // This function sends the gameObj to the back end to be saved on the database. If the player submits the same game twice the function on the back end deletes the previous submit.
 const submitScoresAPI = async(gameObj,player,password) => {
-    const url = 'https://worldle-scorer-backend.onrender.com/api/submit'
+    const url = masterUrl+'/api/submit'
     const data = {
         gameObj:gameObj,
         player:player,

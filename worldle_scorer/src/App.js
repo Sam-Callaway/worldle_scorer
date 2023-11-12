@@ -7,6 +7,9 @@ import PlayerSelector from './Components/playerSelector';
 import CopyScoresButton from './Components/copyScoresButton';
 import History from './Components/history';
 
+const masterUrl = 'https://worldle-scorer-backend.onrender.com';
+//const masterUrl = 'http://localhost:4000';
+
 function handleClick(setPlayer1,setPlayer2, user1, user2){
   setPlayer1(user1)
   setPlayer2(user2)
@@ -46,7 +49,7 @@ function App() {
     // Retrieve the scores for the day from  the back end
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/today');
+        const response = await axios.get(masterUrl+'/api/today');
         console.log('data received')
         console.log(response.data)
         let receivedData = response.data
@@ -65,7 +68,7 @@ function App() {
         console.log("user is" + localStorage.getItem('user'))
         console.log("user found")
       try {
-        const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/password?currentplayer='+localStorage.getItem('user')+'&password='+localStorage.getItem('masterPassword'));
+        const response = await axios.get(masterUrl+'/api/password?currentplayer='+localStorage.getItem('user')+'&password='+localStorage.getItem('masterPassword'));
         if (response.data === 'Password good'){
             setHideSelector(true)
             setHideScoring(false)
@@ -120,9 +123,9 @@ function App() {
         <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>
         </div>
         <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
-          <h3>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h3>
-          <CopyScoresButton scoresArray={scoresArray} player={player1}></CopyScoresButton>
-          <h3>These are our scores today:</h3>
+          <h2>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h2>
+          
+          <h2>These are our scores today:</h2>
           <div id='renderSection'>
         <ScoreRender scoresArray={scoresArray} player={'sam'} ></ScoreRender>
         <ScoreRender scoresArray={scoresArray} player={'rory'} ></ScoreRender>
