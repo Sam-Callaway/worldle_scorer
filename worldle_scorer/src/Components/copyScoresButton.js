@@ -1,8 +1,7 @@
-import React from "react";
 
 function CopyScoresButton(props){
     return (
-        <button className='passwordSubmitButton' onClick={() => createText(props.scoresArray, props.player)}>Copy your scores to share to your friends</button>
+        <button className='playerSelectButton' onClick={() => createText(props.scoresArray, props.player)}>Copy your scores to share to your friends</button>
     );
 }
 

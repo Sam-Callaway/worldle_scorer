@@ -99,9 +99,9 @@ function App() {
         <ScoreRender scoresArray={scoresArray} player={player1}></ScoreRender>
         </div>
         <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
-          <h2>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h2>
-          
-          <h2>These are our scores today:</h2>
+          <h3>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h3>
+          <CopyScoresButton scoresArray={scoresArray} player={player1}></CopyScoresButton>
+          <h3>These are our scores today:</h3>
           <div id='renderSection'>
         <ScoreRender scoresArray={scoresArray} player={'sam'} ></ScoreRender>
         <ScoreRender scoresArray={scoresArray} player={'rory'} ></ScoreRender>
