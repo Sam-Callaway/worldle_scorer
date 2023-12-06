@@ -6,6 +6,8 @@ app.use(express.json());
 app.use(cors());
 require('dotenv').config()
 
+// so vercel will deploy
+
 let today = new Date().setHours(0,0,0,0);
 
 function updateDay(){
