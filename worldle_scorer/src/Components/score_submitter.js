@@ -222,17 +222,18 @@ function scoreParser(pastedValue,player){
             let reds = Number((pastedValue.match(/\u{1F7E5}/gu)||[]).length);
             let blacks = Number((pastedValue.match(/\u{2B1B}/gu)||[]).length);
             let attempts = greens+oranges+reds+blacks
-            let chances = Number(pastedValue.substring((pastedValue.indexOf('/')+1),(pastedValue.lastIndexOf('(')-2)));
+            let chances = Number(pastedValue.substring((pastedValue.indexOf('/')+1),(pastedValue.indexOf(')'))));
             let hints = Number(pastedValue.substring((pastedValue.indexOf('hint')-2),(pastedValue.indexOf('hint')-1)));
             if (fail === true){
                 travleString = travleString = pastedValue.substring((pastedValue.indexOf('away')+7),(pastedValue.indexOf('https')))
             }else{
-                travleString = pastedValue.substring((pastedValue.indexOf('hint')+7),(pastedValue.indexOf('https')))
+                travleString = pastedValue.substring((pastedValue.lastIndexOf(')')+1),(pastedValue.indexOf('https')))
             }            
             gameObj = new travleObj(day,country,greens,oranges,reds,blacks,attempts,chances,hints,fail,player,travleString)
             } catch(err){
                 {return("Not Recognised")}
             }
+            console.log(gameObj)
         }
         else
             // Parsing for countryle scores
