@@ -2,7 +2,7 @@
 
 ## Description
 
-A friend and I are engaged in an intense daily competition over the online geography games Worldle and Travle. I built this website to score our performances each day and decide on a winner.
+A friend and I are engaged in an intense daily competition over the online geography games Worldle and Travle. I built this website to score our performances each day and decide on a winner. Check it out here: https://worldle-scorer.vercel.app/
 
 ## Features
 
