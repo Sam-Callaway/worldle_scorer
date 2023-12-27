@@ -60,6 +60,9 @@ const handleInputChange = (event) => {
         <button className='playerSelectButton' onClick={() => {setHidePasswordBox(false); setCurrentPlayer('rory')}}>
             Rory
         </button>
+        <button>
+            FAQ
+        </button>
         </div>
         <div id='passwordBox' hidden={hidePasswordBox}>Enter Password:<div><input value={password} onChange={handleInputChange}></input><button onClick={() => (enterPassword(password,currentPlayer,setHidePasswordBox,props.setHideSelector,props.setHideScoring,setHidePasswordWarning,props.setPlayer1, props.setPlayer2, props.setMasterPassword))} className='passwordSubmitButton'>Submit</button></div>
         <div hidden={hidePasswordWarning}>Incorrect Password</div>
