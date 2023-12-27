@@ -29,7 +29,6 @@ function App() {
       try {
         const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/today');
         console.log('data received')
-        setHideWaitMessage(true)
         console.log(response.data)
         let receivedData = response.data
         if (Object.keys(receivedData).length === 0) {
