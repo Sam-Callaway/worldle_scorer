@@ -52,8 +52,6 @@ const scoreSchema = new mongoose.Schema({
 const Scores = mongoose.model('Scores', scoreSchema);
 
 // I ping this with a cron job to keep the server awake
-// The update day function seems to have some issues so I stop pinging for an hour at 2AM and then Render will stop the service for inactivity.
-// That should prompt a reset when it's pinged again at 3AM and hopefully move the day forwards
 app.get('/hello/hello', (req, res) => {
   res.send('Hello World!')
   console.log('Hello I am awake')

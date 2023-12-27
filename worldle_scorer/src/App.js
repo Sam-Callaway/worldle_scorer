@@ -20,7 +20,6 @@ function App() {
   const [hideSelector, setHideSelector] = useState(true);
   const [hideScoring, setHideScoring] = useState(true);
   const [hideTestMode, setHideTestMode] = useState(true);
-  const [hideWaitMessage, setHideWaitMessage] = useState(false);
 
   // This function is called on App render.
   useEffect(() => {
@@ -85,7 +84,6 @@ function App() {
     <div className="App">
       
       <header className="App-header">
-        <h3 hidden={hideWaitMessage}>The back end may need to spin up as I'm cheap and using a Render free web service, please wait a minute if the app doesn't appear to be responding.</h3>
         <div hidden={hideSelector}>
       <PlayerSelector setHideTestMode = {setHideTestMode} setHideScoring={setHideScoring} setHideSelector={setHideSelector} setPlayer1={setPlayer1} setPlayer2={setPlayer2} setMasterPassword={setMasterPassword}></PlayerSelector>
         </div>
