@@ -10,12 +10,12 @@ require('dotenv').config()
 
 let today = new Date().setHours(0,0,0,0);
 
-// function updateDay(){
-// setTimeout(() => {
-//   today = new Date().setHours(0,0,0,0); updateDay(); console.log('Updated Day')},10000);
-// }
+function updateDay(){
+setTimeout(() => {
+  today = new Date().setHours(0,0,0,0); updateDay(); console.log('Updated Day')},300000);
+}
 
-// updateDay();
+updateDay();
 const zeroDate = new Date('2023-10-19').setHours(0,0,0,0)
 const timeDifference = today - zeroDate;
 const dayDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
