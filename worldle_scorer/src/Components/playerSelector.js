@@ -1,5 +1,8 @@
 import {useState} from 'react';
 import axios from 'axios';
+import FAQ from './FAQ';
+
+
 
 
 function handleClick(setPlayer1,setPlayer2, user1, user2){
@@ -40,6 +43,7 @@ function PlayerSelector (props){
 
 const [currentPlayer,setCurrentPlayer] = useState('')
 
+
 const [hidePasswordWarning, setHidePasswordWarning] = useState(true);
 const [hidePasswordBox, setHidePasswordBox] = useState(true);
 const [password, setPassword] = useState('')
@@ -49,7 +53,7 @@ const handleInputChange = (event) => {
     return(
         <div>
         <h1>Worldle Scorer</h1>
-        <h3>Who are you?</h3>
+        <h4 style={{marginBottom:"10px"}}>Who are you?</h4>
         <div id='playerButtonGrid'>
         <button className='playerSelectButton' onClick={() => {props.setHideTestMode(false); props.setHideSelector(true)}}>
             Just testing it out
@@ -60,14 +64,11 @@ const handleInputChange = (event) => {
         <button className='playerSelectButton' onClick={() => {setHidePasswordBox(false); setCurrentPlayer('rory')}}>
             Rory
         </button>
-        <button>
-            FAQ
-        </button>
+        <FAQ></FAQ>
         </div>
         <div id='passwordBox' hidden={hidePasswordBox}>Enter Password:<div><input value={password} onChange={handleInputChange}></input><button onClick={() => (enterPassword(password,currentPlayer,setHidePasswordBox,props.setHideSelector,props.setHideScoring,setHidePasswordWarning,props.setPlayer1, props.setPlayer2, props.setMasterPassword))} className='passwordSubmitButton'>Submit</button></div>
         <div hidden={hidePasswordWarning}>Incorrect Password</div>
         </div>
-
         </div>
     )
 

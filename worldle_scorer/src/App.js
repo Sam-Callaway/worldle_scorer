@@ -5,10 +5,17 @@ import axios from 'axios';
 import ScoreRender from './Components/score_renderer';
 import PlayerSelector from './Components/playerSelector';
 import CopyScoresButton from './Components/copyScoresButton';
+import PointsModal from './Components/pointsModal';
 
 function handleClick(setPlayer1,setPlayer2, user1, user2){
   setPlayer1(user1)
   setPlayer2(user2)
+}
+
+function handleBackClick(setHideSelector,setHideScoring,setHideTestMode){
+  setHideSelector(false);
+  setHideScoring(true);
+  setHideTestMode(true);
 }
 
 
@@ -93,6 +100,8 @@ function App() {
           </div>
           <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1} masterPassword={masterPassword}></ScorePaster>
           <CopyScoresButton scoresArray={scoresArray} player={player1}></CopyScoresButton>
+          <PointsModal/>
+          <button onClick={()=> handleBackClick(setHideSelector,setHideScoring,setHideTestMode)}>Go Back</button>
         </div>
         <div hidden={hideTestMode}>
         <div id='testgap'>
@@ -100,14 +109,23 @@ function App() {
         </div>
         <ScorePaster scoresArray={scoresArray} scoreUpdater={setScoresArray} player={player1}></ScorePaster>
           <h3>Go test your geography skills on <a href="https://worldle.teuteuf.fr/">Worldle</a> or <a href="https://imois.in/games/travle/">Travle</a> and paste the results above</h3>
+
           <CopyScoresButton scoresArray={scoresArray} player={player1}></CopyScoresButton>
+          <PointsModal/>
           <h3>These are our scores today:</h3>
           <div id='renderSection'>
         <ScoreRender scoresArray={scoresArray} player={'sam'} ></ScoreRender>
-        <ScoreRender scoresArray={scoresArray} player={'rory'} ></ScoreRender>
+        <ScoreRender scoresArray={scoresArray} player={'rory'} ></ScoreRender>        
           </div>
+
+          <button className='playerSelectButton' onClick={()=> handleBackClick(setHideSelector,setHideScoring,setHideTestMode)}>Go Back</button>
         </div>
+      <h6 style={{marginBottom:"10px"}}>Created by Sam Callaway</h6>
+      <a href="https://github.com/Sam-Callaway/worldle_scorer">
+        <img style={{height:"50px"}} src="github-mark.png"></img>
+      </a>       
       </header>
+
     </div>
   );
   
