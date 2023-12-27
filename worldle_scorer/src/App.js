@@ -20,6 +20,7 @@ function App() {
   const [hideSelector, setHideSelector] = useState(true);
   const [hideScoring, setHideScoring] = useState(true);
   const [hideTestMode, setHideTestMode] = useState(true);
+  const [hideWaitMessage, setHideWaitMessage] = useState(false);
 
   // This function is called on App render.
   useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
       try {
         const response = await axios.get('https://worldle-scorer-backend.onrender.com/api/today');
         console.log('data received')
+        setHideWaitMessage(true)
         console.log(response.data)
         let receivedData = response.data
         if (Object.keys(receivedData).length === 0) {
@@ -42,7 +44,7 @@ function App() {
       }
       // Check if this is one of the two players returning and check the password saved in local storage. If it all checks out then skip the first menu and go to the screen for entering scores.
       // I know it isn't 100% secure to be keeping the 'user name' and password in local storage plaintext. However, they're just passwords I made up specifically for this and there's not much at stake really with this website.
-      if (localStorage.getItem('user') === 'rory' || 'sam'){
+      if (localStorage.getItem('user') === 'rory' || localStorage.getItem('user') === 'sam'){
         console.log("user is" + localStorage.getItem('user'))
         console.log("user found")
       try {
@@ -83,6 +85,7 @@ function App() {
     <div className="App">
       
       <header className="App-header">
+        <h3 hidden={hideWaitMessage}>The back end may need to spin up as I'm cheap and using a Render free web service, please wait a minute if the app doesn't appear to be responding.</h3>
         <div hidden={hideSelector}>
       <PlayerSelector setHideTestMode = {setHideTestMode} setHideScoring={setHideScoring} setHideSelector={setHideSelector} setPlayer1={setPlayer1} setPlayer2={setPlayer2} setMasterPassword={setMasterPassword}></PlayerSelector>
         </div>
